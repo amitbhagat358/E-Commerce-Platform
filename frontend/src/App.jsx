@@ -1,11 +1,12 @@
 import React from 'react' 
 import './App.css'
+import Navbar from './components/Navbar'
 
 function App() {
 
   return (
     <>
-    Hello There this is amit bhagat
+    <Navbar />
     </>
   )
 }
