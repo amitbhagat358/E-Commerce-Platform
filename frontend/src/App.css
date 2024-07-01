@@ -1,0 +1,32 @@
+:root{
+  --font-body: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-head: inherit;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  /* --font-icon: null; */
+
+  --text-color: #2D2F34;
+  --heading-color: inherit;
+  --light-text-color: #707682;
+  --link-color: #0074E0;
+  --link-color-alt: #0263BC;
+  --ins-background: #E6F7EB;
+  --del-background: #FFE6E6;
+  --mark-background: #FFF9E6;
+  --page-background: white;
+  --element-background: #F0F1F3;
+  --accent-color: var(--link-color);
+  --invalid-color: #DC2F2F;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  color:var(--text-color);
+  font-size:20px;
+  font-family: var(--font-mono);
+  /* letter-spacing: -1px;; */
+}
