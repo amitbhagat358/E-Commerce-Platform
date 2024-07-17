@@ -18,21 +18,24 @@ const router = express.Router();
 router
   .route("/")
   .post(createUser)
-  .get(authenticate, authorizeAdmin, getAllUsers);
-
-router.post("/auth", loginUser);
-router.post("/logout", logoutCurrentUser);
-
-router
+  
+  router.post("/auth", loginUser);
+  router.post("/logout", logoutCurrentUser);
+  
+  router
   .route("/profile")
   .get(authenticate, getCurrentUserProfile)
   .put(authenticate, updateCurrentUserProfile);
-
-// ADMIN ROUTES 👇
-router
+  
+  // ADMIN ROUTES 👇
+  router
   .route("/:id")
   .delete(authenticate, authorizeAdmin, deleteUserById)
   .get(authenticate, authorizeAdmin, getUserById)
   .put(authenticate, authorizeAdmin, updateUserById);
-
+  
+  router
+  .route("/")
+  .get(authenticate, authorizeAdmin, getAllUsers);
+  
 export default router;

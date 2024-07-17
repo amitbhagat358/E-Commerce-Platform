@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import userRoutes from './Routes/userRoutes.js'
+import categoryRoutes from './Routes/categoryRoutes.js'
 import connectToDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 
@@ -19,6 +20,8 @@ console.log(process.env.PORT)
 
 
 app.use('/api/users', userRoutes);
+app.use("/api/category", categoryRoutes);
+
 
 app.get('/', (req, res) =>{
   res.send("Hello World !");
