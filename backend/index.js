@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import userRoutes from './Routes/userRoutes.js'
 import categoryRoutes from './Routes/categoryRoutes.js'
+import productRoutes from './Routes/productRoutes.js'
 import connectToDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 
@@ -21,6 +22,7 @@ console.log(process.env.PORT)
 
 app.use('/api/users', userRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/products" , productRoutes);
 
 
 app.get('/', (req, res) =>{

@@ -1,7 +1,7 @@
 import Category from "../schemas/categorySchema.js";
-import asyncHandler from "../middlewares/errorHandler.js";
+import errorHandler from "../middlewares/errorHandler.js";
 
-const createCategory = asyncHandler(async (req, res) => {
+const createCategory = errorHandler(async (req, res) => {
   try {
     const { name } = req.body;
 
@@ -23,7 +23,7 @@ const createCategory = asyncHandler(async (req, res) => {
   }
 });
 
-const updateCategory = asyncHandler(async (req, res) => {
+const updateCategory = errorHandler(async (req, res) => {
   try {
     const { name } = req.body;
     const { categoryId } = req.params;
@@ -44,7 +44,7 @@ const updateCategory = asyncHandler(async (req, res) => {
   }
 });
 
-const removeCategory = asyncHandler(async (req, res) => {
+const removeCategory = errorHandler(async (req, res) => {
   try {
     const removed = await Category.findByIdAndDelete(req.params.categoryId);
     res.json(removed);
@@ -54,7 +54,7 @@ const removeCategory = asyncHandler(async (req, res) => {
   }
 });
 
-const listCategory = asyncHandler(async (req, res) => {
+const listCategory = errorHandler(async (req, res) => {
   try {
     const all = await Category.find({});
     res.json(all);
@@ -64,7 +64,7 @@ const listCategory = asyncHandler(async (req, res) => {
   }
 });
 
-const readCategory = asyncHandler(async (req, res) => {
+const readCategory = errorHandler(async (req, res) => {
   try {
     const category = await Category.findOne({ _id: req.params.id });
     res.json(category);
