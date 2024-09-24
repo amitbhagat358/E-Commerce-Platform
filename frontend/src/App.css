@@ -26,6 +26,12 @@ body{
   background-color: var(--page-background);
 }
 
+.react-icons {
+  min-width: 20px;
+  min-height: 20px;
+}
+
+
 .navbar{
   height:60px;
   width:100%;
@@ -62,9 +68,16 @@ body{
 
 .searchInput{
   width:50vw;
+  min-width: 400px;
   height:100%;
   font-size:16px;
   padding-left:10px;
   outline: none;
   border:none;
+}
+
+
+.login{
+  padding-top:100px;
+  
 }
