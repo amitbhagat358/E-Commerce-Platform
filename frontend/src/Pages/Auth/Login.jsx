@@ -74,6 +74,16 @@ const Login = () => {
             {isLoading? "Signing In..." : "Sign In"}
           </button>
         </form>
+        <div >
+            <p>
+              New Customer?{" "}
+              <Link
+                to={redirect ? `/register?redirect=${redirect}` : "/register"}
+              >
+                Register
+              </Link>
+            </p>
+          </div>
       </div>
     </div>
   );

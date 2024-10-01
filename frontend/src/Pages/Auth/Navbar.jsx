@@ -71,21 +71,6 @@ const Navbar = () => {
           {userInfo ? <span>{userInfo.username}</span> : null}
         </Link>
       </div>
-      {userInfo ? <button
-        onClick={() => {
-          console.log("after onclick");
-          logOutHandler();
-        }}
-        style={{
-          zIndex: '1000',
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          cursor: 'pointer',
-        }}
-      >
-        logout
-      </button> : null}
     </>
   );
 };
