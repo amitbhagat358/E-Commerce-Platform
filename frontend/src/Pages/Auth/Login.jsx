@@ -46,41 +46,46 @@ const Login = () => {
   }
 
   return (
-    <div className='login'>
-      <div>
-        <h1> Sign In </h1>
+    <div className='login w-screen h-screen flex justify-center items-center '>
+      <div className='flex flex-col justify-center items-center gap-16 w-[50%] p-12 rounded-xl '>
+        <h1 className='w-full font-medium text-5xl text-start'> Sign In </h1>
 
-        <form onSubmit={submitHandler}>
-          <div>
+        <form onSubmit={submitHandler} className='w-full flex flex-col gap-8'>
+          <div className='flex flex-col gap-2'>
             <label htmlFor="email"> Email Address</label>
             <input
               type="email"
               id="email"
+              placeholder='Enter email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className='h-10 w-[80%] bg-[#323236] text-white border-2 border-gray-600  outline-none p-1  rounded-md'
             />
           </div>
-          <div>
+          <div className='flex flex-col gap-2'>
             <label htmlFor="password">  Password</label>
             <input
               type="password"
               id="password"
+              placeholder='Enter Passwrod'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className='h-10 w-[80%] bg-[#323236] text-white border-2 border-gray-600 outline-none p-1  rounded-md'
             />
           </div>
 
-          <button disabled={isLoading} type='submit'>
-            {isLoading? "Signing In..." : "Sign In"}
+          <button disabled={isLoading} type='submit' className='flex justify-center items-center w-32  h-10 mt-5 bg-pink-600 hover:border-2 hover:border-white rounded-md'>
+            {isLoading ? "Signing In..." : "Sign In"}
           </button>
         </form>
-        <div >
+        <div className='w-full'>
             <p>
-              New Customer?{" "}
+              New Customer?
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}
+                className='ml-5 underline'
               >
-                Register
+                Register Here
               </Link>
             </p>
           </div>

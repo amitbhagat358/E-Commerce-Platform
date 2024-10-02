@@ -9,15 +9,12 @@ import {
 import { FaHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-// import './Navigation.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../../Redux/api/usersApiSlice';
 import { logout } from '../../Redux/features/auth/authSlice';
-// import FavoritesCount from '../Products/FavoritesCount';
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  // const { cartItems } = useSelector((state) => state.cart);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
@@ -42,47 +39,49 @@ const Navigation = () => {
   };
 
   return (
-    <div style={{ zIndex: 9999 }}>
-      <div>
-        <Link to="/">
-          <AiOutlineHome size={26} />
-          <span>HOME</span>{' '}
+    <div
+      style={{ zIndex: 5 }}
+      className={`${
+        showSidebar ? 'hidden' : 'flex'
+      } xl:flex lg:flex flex-col text-white bg-[#000] w-16 h-[100vh]  fixed `}
+      id="navigation-container"
+    >
+      <div className="flex flex-col justify-evenly items-center fixed w-16 h-[50vh] space-y-4">
+        <Link to="/" className="flex items-center">
+          <AiOutlineHome className="" size={26} />
         </Link>
 
-        <Link to="/shop">
-          <AiOutlineShopping size={26} />
-          <span>SHOP</span>{' '}
+        <Link to="/shop" className="flex items-center">
+          <AiOutlineShopping className="" size={26} />
         </Link>
 
-        <Link to="/cart">
-          <div>
-            <AiOutlineShoppingCart size={26} />
-            <span>Cart</span>{' '}
-          </div>
-{/* 
-          <div>
-            {cartItems.length > 0 && (
-              <span>
-                <span>{cartItems.reduce((a, c) => a + c.qty, 0)}</span>
-              </span>
-            )}
-          </div> */}
+        <Link to="/cart" className="flex items-center">
+          <AiOutlineShoppingCart className="" size={26} />
         </Link>
 
-        <Link to="/favorite">
-          <div>
-            <FaHeart size={20} />
-            <span>Favorites</span> {/* <FavoritesCount /> */}
+        <Link to="/favorite" className="flex relative">
+          <div className="flex justify-center items-center">
+            <FaHeart className="" size={20} />
           </div>
         </Link>
       </div>
 
-      <div className="relative">
-        <button onClick={toggleDropdown}>
-          {userInfo ? <span>{userInfo.username}</span> : <></>}
+      <div className="flex flex-col gap-5 fixed bottom-20 w-16 ">
+        <button
+          onClick={toggleDropdown}
+          className="flex items-center text-gray-800 focus:outline-none bg-red-700"
+        >
+          {userInfo ? (
+            <span className="text-white">{userInfo.username}</span>
+          ) : (
+            <></>
+          )}
           {userInfo && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
+              className={`h-4 w-4 ml-1 ${
+                dropdownOpen ? 'transform rotate-180' : ''
+              }`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="white"
@@ -98,50 +97,87 @@ const Navigation = () => {
         </button>
 
         {dropdownOpen && userInfo && (
-          <ul>
+          <ul
+            className={`absolute z-10 left-20 mt-2 space-y-2 bg-[#56565c] text-white ${
+              !userInfo.isAdmin ? '-top-20' : '-top-80'
+            } `}
+          >
             {userInfo.isAdmin && (
               <>
                 <li>
-                  <Link to="/admin/dashboard">Dashboard</Link>
+                  <Link
+                    to="/admin/dashboard"
+                    className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
+                  >
+                    Dashboard
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/admin/productlist">Products</Link>
+                  <Link
+                    to="/admin/productlist"
+                    className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
+                  >
+                    Products
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/admin/categorylist">Category</Link>
+                  <Link
+                    to="/admin/categorylist"
+                    className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
+                  >
+                    Category
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/admin/orderlist">Orders</Link>
+                  <Link
+                    to="/admin/orderlist"
+                    className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
+                  >
+                    Orders
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/admin/userlist">Users</Link>
+                  <Link
+                    to="/admin/userlist"
+                    className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
+                  >
+                    Users
+                  </Link>
                 </li>
               </>
             )}
 
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link
+                to="/profile"
+                className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
+              >
+                Profile
+              </Link>
             </li>
             <li>
-              <button onClick={logoutHandler}>Logout</button>
+              <button
+                onClick={logoutHandler}
+                className="block w-full px-4 py-2 text-left hover:bg-gray-100 hover:text-black"
+              >
+                Logout
+              </button>
             </li>
           </ul>
         )}
         {!userInfo && (
-          <ul>
-            <li>
-              <Link to="/login">
-                <AiOutlineLogin size={26} />
-                <span>LOGIN</span>
+          <div className="flex flex-col gap-5 fixed bottom-20 w-16">
+            <div className="flex justify-center items-center">
+              <Link to="/login" className="flex items-center mt-5">
+                <AiOutlineLogin className="mr-2 mt-[4px]" size={26} />
               </Link>
-            </li>
-            <li>
-              <Link to="/register">
+            </div>
+            <div className="flex flex-col justify-center items-center">
+              <Link to="/register" className="flex items-center mt-5">
                 <AiOutlineUserAdd size={26} />
-                <span>REGISTER</span>
               </Link>
-            </li>
-          </ul>
+            </div>
+          </div>
         )}
       </div>
     </div>
