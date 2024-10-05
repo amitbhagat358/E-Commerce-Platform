@@ -12,20 +12,28 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import Profile from './Pages/User/profile.jsx';
 import Home from './Pages/Home.jsx';
 import Favourites from './Pages/Products/Favourites.jsx';
+import ProductDetails from './Pages/Products/ProductDetails.jsx'
+import AdminRoute from './Pages/Admin/AdminRoute.jsx';
+import UserList from './Pages/Admin/UserList.jsx';
 import './index.css';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index={true} path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route index={true} path="/" element={<Home />} />
       <Route path="/favourites" element={<Favourites />} />
+      <Route path="/product/:id" element={<ProductDetails />} />
 
       {/* {Registerd Users} */}
 
-      <Route path="" element={<PrivateRoute />}>
+      <Route path="/" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
+      </Route>
+
+      <Route path="/admin" element={<AdminRoute />}>
+        <Route path="userlist" element={<UserList />} />
       </Route>
     </Route>
   )

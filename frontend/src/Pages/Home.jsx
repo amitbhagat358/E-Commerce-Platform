@@ -10,7 +10,7 @@ const Home = () => {
   const { data, isLoading, isError } = useGetProductsQuery({ keyword });
 
   return (
-    <>
+    <div className="w-[calc(100%-4rem)]">
       {!keyword ? <Header /> : null}
       {isLoading ? (
         <Loader />
@@ -44,7 +44,7 @@ const Home = () => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 
