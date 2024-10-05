@@ -10,7 +10,8 @@ import Login from './Pages/Auth/Login.jsx';
 import Register from './Pages/Auth/Register.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Profile from './Pages/User/profile.jsx';
-import Home from './Pages/Home.jsx'
+import Home from './Pages/Home.jsx';
+import Favourites from './Pages/Products/Favourites.jsx';
 import './index.css';
 
 const router = createBrowserRouter(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route index={true} path="/" element={<Home />} />
+      <Route path="/favourites" element={<Favourites />} />
 
       {/* {Registerd Users} */}
 
@@ -26,8 +28,6 @@ const router = createBrowserRouter(
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Route>
-
-    
   )
 );
 

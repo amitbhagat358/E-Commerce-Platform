@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 // import Loader from "../../components/Loader";
-import { useProfileMutation } from "../../Redux/api/usersApiSlice";
-import { setCredentials } from "../../Redux/features/auth/authSlice";
-import { Link } from "react-router-dom";
+import { useProfileMutation } from '../../Redux/api/usersApiSlice';
+import { setCredentials } from '../../Redux/features/auth/authSlice';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
-  const [username, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -28,7 +28,7 @@ const Profile = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error('Passwords do not match');
     } else {
       try {
         const res = await updateProfile({
@@ -38,7 +38,7 @@ const Profile = () => {
           password,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
-        toast.success("Profile updated successfully");
+        toast.success('Profile updated successfully');
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
@@ -46,72 +46,70 @@ const Profile = () => {
   };
 
   return (
-    <div >
-      <div>
-        <div>
-          <h2>Update Profile</h2>
-          <form onSubmit={submitHandler}>
-            <div>
-              <label>Name</label>
-              <input
-                type="text"
-                placeholder="Enter name"
-                value={username}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </div>
+    <div className="flex flex-col justify-center items-center w-screen h-screen ">
+      <>
+      <div className='absolute overflow-hidden w-full -z-50 bottom-0 h-[200px]' ><svg viewBox="0 0 500 150" preserveAspectRatio="none" className='h-full w-full'><path d="M0.00,49.99 C317.44,246.22 349.20,-49.99 500.00,49.99 L500.00,150.00 L0.00,150.00 Z" className="stroke-none fill-[#f0a4c6] opacity-70" ></path></svg></div>
+      </>
+      <div className="flex flex-col w-1/2 gap-10">
+        <h2 className="text-5xl">Update Profile</h2>
+        <form onSubmit={submitHandler} className="flex flex-col gap-7 w-full">
+          <div className="flex flex-col gap-1">
+            <label>Name</label>
+            <input
+              type="text"
+              placeholder="Enter name"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
+              className="h-10 w-[80%] bg-[#323236] text-white border-2 border-gray-600  outline-none p-1  rounded-md"
+            />
+          </div>
 
-            <div >
-              <label >Email Address</label>
-              <input
-                type="email"
-                placeholder="Enter email"
+          <div className="flex flex-col gap-1">
+            <label>Email Address</label>
+            <input
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-10 w-[80%] bg-[#323236] text-white border-2 border-gray-600  outline-none p-1  rounded-md"
+            />
+          </div>
 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+          <div className="flex flex-col gap-1">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-10 w-[80%] bg-[#323236] text-white border-2 border-gray-600  outline-none p-1  rounded-md"
+            />
+          </div>
 
-            <div >
-              <label >Password</label>
-              <input
-                type="password"
-                placeholder="Enter password"
+          <div className="flex flex-col gap-1">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="h-10 w-[80%] bg-[#323236] text-white border-2 border-gray-600  outline-none p-1  rounded-md"
+            />
+          </div>
 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+          <div className="flex flex-col gap-5">
+            <button
+              disabled={loadingUpdateProfile}
+              type="submit"
+              className="flex justify-center items-center w-32  h-10 mt-5 bg-pink-600 hover:border-2 hover:border-white rounded-md"
+            >
+              {loadingUpdateProfile ? 'Updating...' : 'Update'}
+            </button>
 
-            <div >
-              <label >Confirm Password</label>
-              <input
-                type="password"
-                placeholder="Confirm password"
-
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-
-            <div >
-              <button
-                type="submit"
-
-              >
-                Update
-              </button>
-
-              <Link
-                to="/user-orders"
-
-              >
-                My Orders
-              </Link>
-            </div>
-            {/* {loadingUpdateProfile && <Loader />} */}
-          </form>
-        </div>
+            <Link to="/user-orders" className='underline text-right w-[80%]'>My Orders</Link>
+          </div>
+          {/* {loadingUpdateProfile && <Loader />} */}
+        </form>
       </div>
     </div>
   );

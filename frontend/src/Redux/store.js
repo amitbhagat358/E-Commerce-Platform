@@ -2,12 +2,23 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { apiSlice } from './api/apiSlice.js';
 import authReducer from './features/auth/authSlice';
+import favouritesReducer from "../Redux/features/favourites/favouriteSlice.js";
+import { getFavouritesFromLocalStorage } from "../Utils/localStorage";
+
+const initialFavourites = getFavouritesFromLocalStorage() || [];
 
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    auth: authReducer
+    auth: authReducer,
+    favourites:favouritesReducer
   },
+
+  
+  preloadedState: {
+    favourites: initialFavourites,
+  },
+
 
   middleware: (getDefaultMiddleWare) =>
     getDefaultMiddleWare().concat(apiSlice.middleware),

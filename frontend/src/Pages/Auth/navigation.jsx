@@ -43,7 +43,7 @@ const Navigation = () => {
       style={{ zIndex: 5 }}
       className={`${
         showSidebar ? 'hidden' : 'flex'
-      } xl:flex lg:flex flex-col text-white bg-[#000] w-16 h-[100vh]  fixed `}
+      } xl:flex lg:flex flex-col text-white bg-[#000] w-16 h-[100vh] sticky top-0`}
       id="navigation-container"
     >
       <div className="flex flex-col justify-evenly items-center fixed w-16 h-[50vh] space-y-4">
@@ -59,7 +59,7 @@ const Navigation = () => {
           <AiOutlineShoppingCart className="" size={26} />
         </Link>
 
-        <Link to="/favorite" className="flex relative">
+        <Link to="/favourites" className="flex relative">
           <div className="flex justify-center items-center">
             <FaHeart className="" size={20} />
           </div>

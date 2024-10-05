@@ -1,18 +1,18 @@
 import { useSelector } from "react-redux";
-import { selectFavoriteProduct } from "../../redux/features/favorites/favoriteSlice";
+import { selectFavouriteProduct } from "../../Redux/features/favourites/favouriteSlice";
 import Product from "./Product";
 
-const Favorites = () => {
-  const favorites = useSelector(selectFavoriteProduct);
+const Favourites = () => {
+  const favourites = useSelector(selectFavouriteProduct);
 
   return (
-    <div className="ml-[10rem]">
-      <h1 className="text-lg font-bold ml-[3rem] mt-[3rem]">
-        FAVORITE PRODUCTS
-      </h1>
+    <div className="w-[calc(100%-4rem)] pl-16 pt-10">
+      <div className="text-2xl font-semibold">
+        FAVOURITE PRODUCTS
+      </div>
 
       <div className="flex flex-wrap">
-        {favorites.map((product) => (
+        {favourites.map((product) => (
           <Product key={product._id} product={product} />
         ))}
       </div>
@@ -20,4 +20,4 @@ const Favorites = () => {
   );
 };
 
-export default Favorites;
+export default Favourites;
