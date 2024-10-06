@@ -19,6 +19,7 @@ import './index.css';
 import CategoryList from './Pages/Admin/CategoryList.jsx';
 import ProductList from './Pages/Admin/ProductList.jsx';
 import AllProductList from './Pages/Admin/AllProductList.jsx';
+import ProductUpdate from './Pages/Admin/ProductUpdate.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +41,8 @@ const router = createBrowserRouter(
         <Route path="categorylist" element={<CategoryList />} />
         <Route path="productlist" element={<ProductList />} />
         <Route path="allproductlist" element={<AllProductList />} />
+        <Route path="product/update/:_id" element={<ProductUpdate />} />
+
       </Route>
     </Route>
   )
