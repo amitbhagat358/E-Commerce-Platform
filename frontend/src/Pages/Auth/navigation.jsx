@@ -69,7 +69,7 @@ const Navigation = () => {
       <div className="flex flex-col gap-5 fixed bottom-20 w-16 ">
         <button
           onClick={toggleDropdown}
-          className="flex items-center text-gray-800 focus:outline-none bg-red-700"
+          className="flex items-center text-gray-800 focus:outline-none"
         >
           {userInfo ? (
             <span className="text-white">{userInfo.username}</span>
@@ -114,7 +114,7 @@ const Navigation = () => {
                 </li>
                 <li>
                   <Link
-                    to="/admin/productlist"
+                    to="/admin/allproductlist"
                     className="block px-4 py-2 hover:bg-gray-100 hover:text-black"
                   >
                     Products

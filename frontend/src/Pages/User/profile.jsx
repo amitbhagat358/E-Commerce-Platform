@@ -47,9 +47,6 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-screen h-screen ">
-      <>
-      <div className='absolute overflow-hidden w-full -z-50 bottom-0 h-[200px]' ><svg viewBox="0 0 500 150" preserveAspectRatio="none" className='h-full w-full'><path d="M0.00,49.99 C317.44,246.22 349.20,-49.99 500.00,49.99 L500.00,150.00 L0.00,150.00 Z" className="stroke-none fill-[#f0a4c6] opacity-70" ></path></svg></div>
-      </>
       <div className="flex flex-col w-1/2 gap-10">
         <h2 className="text-5xl">Update Profile</h2>
         <form onSubmit={submitHandler} className="flex flex-col gap-7 w-full">
