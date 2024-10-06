@@ -13,6 +13,7 @@ import Profile from './Pages/User/profile.jsx';
 import Home from './Pages/Home.jsx';
 import Favourites from './Pages/Products/Favourites.jsx';
 import ProductDetails from './Pages/Products/ProductDetails.jsx'
+import Cart from './Pages/Cart.jsx';
 import AdminRoute from './Pages/Admin/AdminRoute.jsx';
 import UserList from './Pages/Admin/UserList.jsx';
 import './index.css';
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="/register" element={<Register />} />
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/product/:id" element={<ProductDetails />} />
+      <Route path="/cart" element={<Cart />} />
 
       {/* {Registerd Users} */}
 
