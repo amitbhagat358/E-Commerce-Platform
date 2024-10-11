@@ -36,6 +36,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: ORDERS_URL,
       }),
+      keepUnusedDataFor:1,
     }),
 
     deliverOrder: builder.mutation({
