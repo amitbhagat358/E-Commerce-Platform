@@ -14,6 +14,7 @@ import Home from './Pages/Home.jsx';
 import Favourites from './Pages/Products/Favourites.jsx';
 import ProductDetails from './Pages/Products/ProductDetails.jsx'
 import Cart from './Pages/Cart.jsx';
+import Shop from './Pages/Shop.jsx';
 import AdminRoute from './Pages/Admin/AdminRoute.jsx';
 import UserList from './Pages/Admin/UserList.jsx';
 import './index.css';
@@ -21,6 +22,7 @@ import CategoryList from './Pages/Admin/CategoryList.jsx';
 import ProductList from './Pages/Admin/ProductList.jsx';
 import AllProductList from './Pages/Admin/AllProductList.jsx';
 import ProductUpdate from './Pages/Admin/ProductUpdate.jsx'
+import Shipping from './Pages/Orders/Shipping.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,11 +33,13 @@ const router = createBrowserRouter(
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/shop" element={<Shop />} />
 
       {/* {Registerd Users} */}
 
       <Route path="/" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
+        <Route path="/shipping" element={<Shipping />} />
       </Route>
 
       <Route path="/admin" element={<AdminRoute />}>

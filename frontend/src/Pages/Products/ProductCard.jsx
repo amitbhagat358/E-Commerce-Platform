@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../Redux/features/cart/cartSlice";
+import { addToCart } from "../../Redux/features/cart/CartSlice";
 import { toast } from "react-toastify";
 import HeartIcon from "./HeartIcon";
 
@@ -10,10 +10,7 @@ const ProductCard = ({ p }) => {
 
   const addToCartHandler = (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
-    toast.success("Item added successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
+    toast.success("Item added successfully");
   };
 
   return (
