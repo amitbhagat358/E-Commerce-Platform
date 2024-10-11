@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
-import { addToCart, removeFromCart } from "../Redux/features/cart/cartSlice";
+import { addToCart, removeFromCart } from "../Redux/features/cart/CartSlice";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const Cart = () => {
 
                     <div className="mt-2 text-white">{item.brand}</div>
                     <div className="mt-2 text-white font-bold">
-                      $ {item.price}
+                    ₹{' '} {item.price}
                     </div>
                   </div>
 
@@ -89,7 +89,7 @@ const Cart = () => {
                   </h2>
 
                   <div className="text-2xl font-bold">
-                    ${" "}
+                  ₹{" "}
                     {cartItems
                       .reduce((acc, item) => acc + item.qty * item.price, 0)
                       .toFixed(2)}

@@ -95,12 +95,13 @@ const Shipping = () => {
                   type="radio"
                   className="form-radio text-pink-500"
                   name="paymentMethod"
-                  value="PayPal"
-                  checked={paymentMethod === "PayPal"}
+                  value="Credit/Debit card"
+                  required
+                  checked={paymentMethod === "Credit/Debit card"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
 
-                <span className="ml-2">PayPal or Credit Card</span>
+                <span className="ml-2">Credit / Debit card</span>
               </label>
             </div>
           </div>
