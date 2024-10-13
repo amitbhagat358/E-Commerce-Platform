@@ -55,13 +55,7 @@ const updateProductDetails = errorHandler(async (req, res) => {
       case !quantity:
         return res.json({ error: "Quantity is required" });
     }
-
-    const productExists = await Product.findOne({name});
-
-    if(productExists){
-      return res.json({error: "Product with same name already exists"});
-    }
-
+    
     const product = await Product.findByIdAndUpdate(
       req.params.id,
       { ...req.fields },

@@ -6,7 +6,8 @@ import {
   AiOutlineUserAdd,
   AiOutlineShoppingCart,
 } from 'react-icons/ai';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaRegUser } from 'react-icons/fa';
+import { Tooltip } from 'react-tooltip';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -43,56 +44,77 @@ const Navigation = () => {
       style={{ zIndex: 5 }}
       className={`${
         showSidebar ? 'hidden' : 'flex'
-      } xl:flex lg:flex flex-col text-white bg-[#000] w-16 h-[100vh] sticky top-0`}
+      } xl:flex lg:flex flex-col  w-16 h-[100vh] sticky top-0 border-r `}
       id="navigation-container"
     >
       <div className="flex flex-col justify-evenly items-center fixed w-16 h-[50vh] space-y-4">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center" id="home">
           <AiOutlineHome className="" size={26} />
+          <Tooltip
+            anchorSelect="#home"
+            content={`Home`}
+            place={'right'}
+            offset={15}
+            delayShow={500}
+          />
         </Link>
 
-        <Link to="/shop" className="flex items-center">
+        <Link to="/shop" className="flex items-center" id="shop">
           <AiOutlineShopping className="" size={26} />
+          <Tooltip
+            anchorSelect="#shop"
+            content={`Shop`}
+            place={'right'}
+            offset={15}
+            delayShow={500}
+          />
         </Link>
 
-        <Link to="/cart" className="flex items-center">
+        <Link to="/cart" className="flex items-center" id="cart">
           <AiOutlineShoppingCart className="" size={26} />
+          <Tooltip
+            anchorSelect="#cart"
+            content={`Cart`}
+            place={'right'}
+            offset={15}
+            delayShow={500}
+          />
         </Link>
 
-        <Link to="/favourites" className="flex relative">
+        <Link to="/favourites" className="flex relative" id="favourites">
           <div className="flex justify-center items-center">
-            <FaHeart className="" size={20} />
+            <FaHeart className="" size={25} />
+            <Tooltip
+              anchorSelect="#favourites"
+              content={`favourites`}
+              place={'right'}
+              offset={15}
+              delayShow={500}
+            />
           </div>
         </Link>
       </div>
 
-      <div className="flex flex-col gap-5 fixed bottom-20 w-16 ">
+      <div className="flex flex-col justify-center items-center gap-5 fixed bottom-20 w-16 ">
         <button
           onClick={toggleDropdown}
-          className="flex items-center text-gray-800 focus:outline-none"
+          className="w-full text-gray-800 focus:outline-none"
+          id="user-button"
         >
           {userInfo ? (
-            <span className="text-white">{userInfo.username}</span>
+            <div className="flex flex-col justify-center items-center w-full gap-2">
+              <FaRegUser size={25} />
+              <div className="font-semibold">{userInfo.username}</div>
+              <Tooltip
+                anchorSelect="#user-button"
+                content={`User`}
+                place={'right'}
+                offset={15}
+                delayShow={500}
+              />
+            </div>
           ) : (
             <></>
-          )}
-          {userInfo && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={`h-4 w-4 ml-1 ${
-                dropdownOpen ? 'transform rotate-180' : ''
-              }`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d={dropdownOpen ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'}
-              />
-            </svg>
           )}
         </button>
 
