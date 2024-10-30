@@ -1,6 +1,6 @@
 import { useGetTopProductsQuery } from "../Redux/api/productApiSlice";
 import Loader from "./Loader";
-import SmallProduct from "../Pages/Products/SmallProduct"
+import SmallProduct from "../Pages/Products/SmallProduct";
 import ProductCarousel from "../Pages/Products/ProductCarousel";
 
 const Header = () => {
@@ -16,11 +16,11 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex justify-around">
-        <div className="xl:block lg:hidden md:hidden:sm:hidden">
-          <div className="grid grid-cols-2">
+      <div className="flex flex-wrap justify-center gap-5">
+        <div className="w-full">
+          <div className="flex flex-wrap justify-center gap-5">
             {data.map((product) => (
-              <div key={product._id}>
+              <div key={product._id} >
                 <SmallProduct product={product} />
               </div>
             ))}

@@ -42,9 +42,7 @@ const Navigation = () => {
   return (
     <div
       style={{ zIndex: 5 }}
-      className={`${
-        showSidebar ? 'hidden' : 'flex'
-      } xl:flex lg:flex flex-col  w-16 h-[100vh] sticky top-0 border-r `}
+      className="flex flex-col flex-wrap w-16 h-[100vh] top-0 border-r fixed"
       id="navigation-container"
     >
       <div className="flex flex-col justify-evenly items-center fixed w-16 h-[50vh] space-y-4">
