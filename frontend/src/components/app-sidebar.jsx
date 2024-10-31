@@ -29,6 +29,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '@/Redux/api/usersApiSlice';
 import { logout } from '@/Redux/features/auth/authSlice';
+import { Separator } from '@/components/ui/separator';
 
 const navItems = [
   {
@@ -140,6 +141,7 @@ export function AppSidebar() {
                       </DropdownMenuItem>
                     </>
                   )}
+                  <Separator />
                   <DropdownMenuItem>
                     <Link to="/profile">
                       <span>Profile</span>

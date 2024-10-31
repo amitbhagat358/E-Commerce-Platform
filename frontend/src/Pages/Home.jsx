@@ -1,9 +1,9 @@
-import { Link, useParams } from "react-router-dom";
-import { useGetProductsQuery } from "../Redux/api/productApiSlice.js";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
-import Header from "../components/Header";
-import Product from "./Products/Product";
+import { Link, useParams } from 'react-router-dom';
+import { useGetProductsQuery } from '../Redux/api/productApiSlice.js';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
+import Header from '../components/Header';
+import Product from './Products/Product';
 
 const Home = () => {
   const { keyword } = useParams();
@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div className="ml-16">
       {!keyword ? <Header /> : null}
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : isError ? (
         <Message variant="danger">
@@ -43,7 +43,7 @@ const Home = () => {
             </div>
           </div>
         </>
-      )} */}
+      )}
     </div>
   );
 };
