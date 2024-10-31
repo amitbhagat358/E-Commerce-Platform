@@ -1,20 +1,25 @@
-import React from 'react' 
-import Navbar from './Pages/Auth/navigation'
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import Navbar from './Pages/Auth/navigation';
+import { Outlet } from 'react-router-dom';
 
-import { ToastContainer } from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css";
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-
   return (
     <>
-    <ToastContainer />
-    <Navbar />
-    <Outlet />
+      <ToastContainer />
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarTrigger />
+        <Outlet></Outlet>
+      </SidebarProvider>
+      <Navbar />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
