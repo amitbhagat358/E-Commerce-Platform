@@ -19,9 +19,11 @@ import {
   ChevronUp,
   Heart,
   Home,
+  LogIn,
   ShoppingBag,
   ShoppingCart,
   User2,
+  UserPlus,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,10 +95,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      {userInfo && (
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {userInfo && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton className="mb-5 font-semibold">
@@ -147,10 +150,25 @@ export function AppSidebar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      )}
+            )}
+
+            {!userInfo && (
+              <>
+                <Link to="/register">
+                  <SidebarMenuButton className="mb-5 font-semibold">
+                    <UserPlus /> Sign Up
+                  </SidebarMenuButton>
+                </Link>
+                <Link to="/login">
+                  <SidebarMenuButton className="mb-5 font-semibold">
+                    <LogIn /> Sign In
+                  </SidebarMenuButton>
+                </Link>
+              </>
+            )}
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

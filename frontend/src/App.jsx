@@ -1,5 +1,4 @@
 import React from 'react';
-import Navbar from './Pages/Auth/navigation';
 import { Outlet } from 'react-router-dom';
 
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
@@ -17,7 +16,6 @@ function App() {
         <SidebarTrigger />
         <Outlet></Outlet>
       </SidebarProvider>
-      <Navbar />
     </>
   );
 }
