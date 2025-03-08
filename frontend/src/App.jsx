@@ -13,7 +13,6 @@ function App() {
       <ToastContainer />
       <SidebarProvider>
         <AppSidebar />
-        <SidebarTrigger className="sticky top-0" />
         <Outlet></Outlet>
       </SidebarProvider>
     </>

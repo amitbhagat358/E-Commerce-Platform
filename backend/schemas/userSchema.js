@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema(
   {
@@ -15,7 +15,6 @@ const userSchema = mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
     },
 
     isAdmin: {
@@ -23,10 +22,18 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+
+    loginMethod: {
+      type: String,
+      required: true,
+    },
+    googleId: String,
+    isVerified: Boolean,
+    profileImage: String,
   },
   { timestamps: true }
 );
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

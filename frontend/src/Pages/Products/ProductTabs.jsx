@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Ratings from "./Ratings";
-import { useGetTopProductsQuery } from "../../Redux/api/productApiSlice";
-import SmallProduct from "./SmallProduct";
-import Loader from "../../components/Loader";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Ratings from './Ratings';
+import { useGetTopProductsQuery } from '../../Redux/api/productApiSlice';
+import SmallProduct from './SmallProduct';
+import Loader from '../../components/Loader';
 
 const ProductTabs = ({
   loadingProductReview,
@@ -28,11 +28,11 @@ const ProductTabs = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="w-full flex flex-col md:flex-row">
       <section className="mr-[5rem]">
         <div
           className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 1 ? "font-bold" : ""
+            activeTab === 1 ? 'font-bold' : ''
           }`}
           onClick={() => handleTabClick(1)}
         >
@@ -40,7 +40,7 @@ const ProductTabs = ({
         </div>
         <div
           className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 2 ? "font-bold" : ""
+            activeTab === 2 ? 'font-bold' : ''
           }`}
           onClick={() => handleTabClick(2)}
         >
@@ -48,7 +48,7 @@ const ProductTabs = ({
         </div>
         <div
           className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 3 ? "font-bold" : ""
+            activeTab === 3 ? 'font-bold' : ''
           }`}
           onClick={() => handleTabClick(3)}
         >

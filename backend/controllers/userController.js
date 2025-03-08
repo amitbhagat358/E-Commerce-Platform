@@ -3,64 +3,94 @@ import errorHandler from "../middlewares/errorHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
-const createUser = errorHandler(async (req, res) => {
+const createUserUsingCredentials = errorHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
     throw new Error("Please fill all the inputs.");
   }
 
-  const userExists = await User.findOne({ email });
-  if (userExists) return res.status(400).send("User with given email already exists");
-
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const newUser = new User({ username, email, password: hashedPassword });
-
-  try {
-    await newUser.save();
-    createToken(res, newUser._id);
-
-    res.status(201).json({
-      _id: newUser._id,
-      username: newUser.username,
-      email: newUser.email,
-      isAdmin: newUser.isAdmin,
-    });
-  } catch (error) {
-    res.status(400);
-    throw new Error("Invalid user data");
-  }
-});
-
-const loginUser = errorHandler(async (req, res) => {
-  const { email, password } = req.body;
-
-  console.log(email);
-  console.log(password);
-
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password
-    );
-
-    if (isPasswordValid) {
-      createToken(res, existingUser._id);
-
-      res.status(201).json({
-        _id: existingUser._id,
-        username: existingUser.username,
-        email: existingUser.email,
-        isAdmin: existingUser.isAdmin,
+    const loginMethod = existingUser.loginMethod;
+    if (loginMethod === "google") {
+      return res.status(400).json({
+        message: "Email is already in use.",
       });
-      return;
+    }
+
+    if (loginMethod === "credentials") {
+      return res.status(400).json({
+        message:
+          "User with given email already exists. Kindly login using the email.",
+      });
     }
   }
 
-  res.status(401).send("No user found with given credentials");
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword,
+    loginMethod: "credentials",
+  });
+
+  await newUser.save();
+
+  return res.status(201).json({
+    _id: newUser._id,
+    username: newUser.username,
+    email: newUser.email,
+    isAdmin: newUser.isAdmin,
+    loginMethod: "credentials",
+  });
+});
+
+const googleCallback = errorHandler(async (req, res) => {
+  const user = req.user;
+  const token = createToken(res, user._id);
+
+  const queryParams = new URLSearchParams({
+    token,
+    user: JSON.stringify(user),
+  }).toString();
+
+  res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${queryParams}`);
+});
+
+const credentialsLogin = errorHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const existingUser = await User.findOne({ email });
+
+  if (!existingUser) {
+    return res
+      .status(400)
+      .json({ message: "User doesn't exists for this credentials." });
+  }
+
+  const accountType = existingUser.loginMethod;
+  if (accountType !== "credentials") {
+    return res.status(400).json({
+      message: `This account is using ${accountType} method for login. Use continue with ${accountType}`,
+    });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+
+  if (isPasswordValid) {
+    createToken(res, existingUser._id);
+
+    return res.status(201).json({
+      _id: existingUser._id,
+      username: existingUser.username,
+      email: existingUser.email,
+      isAdmin: existingUser.isAdmin,
+    });
+  }
+  res.status(401).json({ message: "Invalid password" });
 });
 
 const logoutCurrentUser = errorHandler(async (req, res) => {
@@ -172,8 +202,9 @@ const updateUserById = errorHandler(async (req, res) => {
 });
 
 export {
-  createUser,
-  loginUser,
+  createUserUsingCredentials,
+  credentialsLogin,
+  googleCallback,
   logoutCurrentUser,
   getAllUsers,
   getCurrentUserProfile,

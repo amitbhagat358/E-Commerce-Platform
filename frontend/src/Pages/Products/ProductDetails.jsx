@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
-} from "../../Redux/api/productApiSlice";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
+} from '../../Redux/api/productApiSlice';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 import {
   FaBox,
   FaClock,
   FaShoppingCart,
   FaStar,
   FaStore,
-} from "react-icons/fa";
-import moment from "moment";
-import HeartIcon from "./HeartIcon";
-import Ratings from "./Ratings";
-import ProductTabs from "./ProductTabs";
+} from 'react-icons/fa';
+import moment from 'moment';
+import HeartIcon from './HeartIcon';
+import Ratings from './Ratings';
+import ProductTabs from './ProductTabs';
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -27,7 +27,7 @@ const ProductDetails = () => {
 
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const {
     data: product,
@@ -51,12 +51,11 @@ const ProductDetails = () => {
         comment,
       }).unwrap();
       refetch();
-      toast.success("Review created successfully");
+      toast.success('Review created successfully');
     } catch (error) {
       toast.error(error?.data || error.message);
     }
   };
-
 
   return (
     <div className="w-[calc(100%-4rem)]">
@@ -77,13 +76,9 @@ const ProductDetails = () => {
         </Message>
       ) : (
         <>
-          <div className="flex flex-wrap relative items-between mt-[2rem] ml-[10rem]">
-            <div>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full xl:w-[50rem] lg:w-[45rem] md:w-[30rem] sm:w-[20rem] mr-[2rem]"
-              />
+          <div className="flex flex-wrap relative gap-10 items-between mt-[2rem] mx-5">
+            <div className="object-cover min-h-[300px] w-full lg:min-h-0 lg:w-[40%]">
+              <img src={product.image} alt={product.name} className="w-full" />
 
               <HeartIcon product={product} />
             </div>
@@ -94,35 +89,34 @@ const ProductDetails = () => {
                 {product.description}
               </p>
 
-              <p className="text-5xl my-4 font-extrabold">$ {product.price}</p>
+              <p className="text-5xl my-4 font-extrabold">
+                {'₹ '} {product.price}
+              </p>
 
-              <div className="flex items-center justify-between w-[20rem]">
+              <div className="flex">
                 <div className="one">
-                  <h1 className="flex items-center mb-6">
-                    <FaStore className="mr-2 text-white" /> Brand:{" "}
-                    {product.brand}
+                  <h1 className="flex gap-2 items-center mb-6">
+                    <FaStore className="" /> Brand: {product.brand}
                   </h1>
-                  <h1 className="flex items-center mb-6 w-[20rem]">
-                    <FaClock className="mr-2 text-white" /> Added:{" "}
+                  <h1 className="flex gap-2 items-center mb-6 w-[20rem]">
+                    <FaClock className="" /> Added:{' '}
                     {moment(product.createAt).fromNow()}
                   </h1>
-                  <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Reviews:{" "}
-                    {product.numReviews}
+                  <h1 className="flex gap-2 items-center mb-6">
+                    <FaStar className="" /> Reviews: {product.numReviews}
                   </h1>
                 </div>
 
                 <div className="two">
-                  <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Ratings: {rating}
+                  <h1 className="flex gap-2 items-center mb-6">
+                    <FaStar className="mr-2" /> Ratings: {rating}
                   </h1>
-                  <h1 className="flex items-center mb-6">
-                    <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
+                  <h1 className="flex  gap-2 items-center mb-6">
+                    <FaShoppingCart className="mr-2" /> Quantity:{' '}
                     {product.quantity}
                   </h1>
-                  <h1 className="flex items-center mb-6 w-[10rem]">
-                    <FaBox className="mr-2 text-white" /> In Stock:{" "}
-                    {product.countInStock}
+                  <h1 className="flex gap-2 items-center mb-6 w-[10rem]">
+                    <FaBox className="mr-2" /> In Stock: {product.countInStock}
                   </h1>
                 </div>
               </div>
@@ -151,7 +145,7 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <div className="mt-[5rem] container flex flex-wrap items-start justify-between ml-[10rem]">
+            <div className="mt-[10px] container flex flex-wrap items-start justify-between">
               <ProductTabs
                 loadingProductReview={loadingProductReview}
                 userInfo={userInfo}

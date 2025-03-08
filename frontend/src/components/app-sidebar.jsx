@@ -8,12 +8,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import {
   ChevronUp,
@@ -25,41 +27,23 @@ import {
   User2,
   UserPlus,
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '@/Redux/api/usersApiSlice';
 import { logout } from '@/Redux/features/auth/authSlice';
-import { Separator } from '@/components/ui/separator';
 
 const navItems = [
-  {
-    name: 'Home',
-    url: '',
-    icon: Home,
-  },
-  {
-    name: 'Shop',
-    url: 'shop',
-    icon: ShoppingBag,
-  },
-  {
-    name: 'Cart',
-    url: 'cart',
-    icon: ShoppingCart,
-  },
-  {
-    name: 'Favourites',
-    url: 'favourites',
-    icon: Heart,
-  },
+  { name: 'Home', url: '', icon: Home },
+  { name: 'Shop', url: 'shop', icon: ShoppingBag },
+  { name: 'Cart', url: 'cart', icon: ShoppingCart },
+  { name: 'Favourites', url: 'favourites', icon: Heart },
 ];
 
 export function AppSidebar() {
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [logoutApiCall] = useLogoutMutation();
 
@@ -72,19 +56,26 @@ export function AppSidebar() {
       console.error(error);
     }
   };
+
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader />
+      <SidebarHeader className="mb-5">
+        <SidebarTrigger />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((navItem) => (
-                <SidebarMenuItem
-                  key={navItem.name}
-                  className="w-full h-12 font-semibold"
-                >
-                  <SidebarMenuButton asChild>
+                <SidebarMenuItem key={navItem.name} className="h-10 mb-2">
+                  <SidebarMenuButton
+                    asChild
+                    className={`font-semibold h-10 ${
+                      location.pathname === `/${navItem.url}`
+                        ? 'bg-gray-100'
+                        : 'text-gray-700'
+                    }`}
+                  >
                     <Link to={`/${navItem.url}`}>
                       <navItem.icon />
                       <span>{navItem.name}</span>
@@ -119,6 +110,7 @@ export function AppSidebar() {
                           <span>Dashboard</span>
                         </Link>
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem>
                         <Link to="/admin/allproductlist">
                           <span>Products</span>
@@ -141,7 +133,7 @@ export function AppSidebar() {
                       </DropdownMenuItem>
                     </>
                   )}
-                  <Separator />
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Link to="/profile">
                       <span>Profile</span>
@@ -157,12 +149,12 @@ export function AppSidebar() {
             {!userInfo && (
               <>
                 <Link to="/register">
-                  <SidebarMenuButton className="mb-5 font-semibold">
+                  <SidebarMenuButton className="mb-5 font-semibold truncate overflow-hidden whitespace-nowrap">
                     <UserPlus /> Sign Up
                   </SidebarMenuButton>
                 </Link>
                 <Link to="/login">
-                  <SidebarMenuButton className="mb-5 font-semibold">
+                  <SidebarMenuButton className="mb-5 font-semibold truncate overflow-hidden whitespace-nowrap">
                     <LogIn /> Sign In
                   </SidebarMenuButton>
                 </Link>
