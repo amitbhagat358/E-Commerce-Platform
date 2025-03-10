@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,7 +16,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useRegisterMutation } from "@/Redux/api/usersApiSlice";
+import {
+  useRegisterMutation,
+  useSendOtpMutation,
+} from "@/Redux/api/usersApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/Redux/features/auth/authSlice";
 
@@ -25,13 +30,16 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showOtpScreen, setShowOtpScreen] = useState(false);
+  const [otp, setOtp] = useState("");
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
 
   const { userInfo } = useSelector((state) => state.auth);
-  const [register, { isLoading }] = useRegisterMutation();
+  const [register, { isLoading: verifying }] = useRegisterMutation();
+  const [sendOtp, { isLoading: sendingOtp }] = useSendOtpMutation();
   const distpatch = useDispatch();
 
   useEffect(() => {
@@ -40,27 +48,96 @@ export default function RegisterForm() {
     }
   }, [redirect, userInfo, navigate]);
 
-  const submitHandler = async (e) => {
+  const handleInitialSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
+
     try {
-      const res = await register({ username, email, password }).unwrap();
+      const res = await sendOtp({ email }).unwrap();
+      setShowOtpScreen(true);
+      toast.info("OTP sent to your email");
+    } catch (error) {
+      toast.error(error?.data?.message || "Error sending otp");
+    }
+  };
+
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!otp) {
+      toast.error("Please enter OTP");
+      return;
+    }
+
+    try {
+      const res = await register({ username, email, password, otp }).unwrap();
       distpatch(setCredentials({ ...res }));
       navigate(redirect);
       toast.success("Registration Successfully");
     } catch (err) {
       console.log(err, "error");
-      toast.error(err.data.message || "Registration failed");
+      toast.error(err.data?.message || "Registration failed");
     }
   };
 
   const handleGoogleLogin = () => {
     window.location.href = `http://localhost:3000/api/users/auth/google`;
   };
+
+  if (showOtpScreen) {
+    return (
+      <div className="container flex h-screen items-center justify-center py-8">
+        <Card className="mx-auto w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">
+              Verify your email
+            </CardTitle>
+            <CardDescription className="text-center">
+              We've sent a verification code to {email}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleOtpSubmit} className="space-y-4 mb-5">
+              <div className="space-y-2">
+                <Label htmlFor="otp">Enter OTP</Label>
+                <Input
+                  id="otp"
+                  placeholder="Enter verification code"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                />
+              </div>
+
+              <Button type="submit" className="w-full" disabled={verifying}>
+                {verifying ? (
+                  <>
+                    <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  "Verify & Create Account"
+                )}
+              </Button>
+            </form>
+            <div className="text-center">
+              <Button
+                variant="link"
+                className="text-sm text-muted-foreground"
+                onClick={() => setShowOtpScreen(false)}
+              >
+                Back to registration
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container flex h-screen items-center justify-center py-8">
@@ -74,7 +151,7 @@ export default function RegisterForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={submitHandler} className="space-y-4 mb-5">
+          <form onSubmit={handleInitialSubmit} className="space-y-4 mb-5">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -136,11 +213,11 @@ export default function RegisterForm() {
               </button>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={sendingOtp}>
+              {sendingOtp ? (
                 <>
                   <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account...
+                  Sending OTP...
                 </>
               ) : (
                 "Create account"
@@ -174,7 +251,7 @@ export default function RegisterForm() {
               to={redirect ? `/login?redirect=${redirect}` : "/login"}
               className="text-primary underline-offset-4 hover:underline"
             >
-              Sign in
+              Login
             </Link>
           </p>
         </CardFooter>

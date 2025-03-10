@@ -98,6 +98,15 @@ const Login = () => {
               </div>
             </div>
 
+            <div className="text-right">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-primary underline-offset-4 hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
@@ -108,18 +117,16 @@ const Login = () => {
                 "Login"
               )}
             </Button>
-          </form>
-        </CardContent>
 
-        <CardFooter className="flex flex-col gap-4">
-          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
-              Or
-            </span>
-          </div>
-          <div className="w-full">
+            <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+              <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                Or
+              </span>
+            </div>
+
             <Button
               onClick={handleGoogleLogin}
+              type="button"
               variant="outline"
               className="w-full"
             >
@@ -131,7 +138,10 @@ const Login = () => {
               </svg>
               Continue with Google
             </Button>
-          </div>
+          </form>
+        </CardContent>
+
+        <CardFooter className="flex flex-col gap-4">
           <p className="text-sm text-muted-foreground">
             New customer?{" "}
             <Link

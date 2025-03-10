@@ -2,14 +2,13 @@ import User from "../schemas/userSchema.js";
 import errorHandler from "../middlewares/errorHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
+import OTP from "../schemas/OtpSchema.js";
+import otpGenerator from "otp-generator";
+import crypto from "crypto";
+import sendEmail from "../Utils/mailSender.js";
 
-const createUserUsingCredentials = errorHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-
-  if (!username || !email || !password) {
-    throw new Error("Please fill all the inputs.");
-  }
-
+export const sendotp = errorHandler(async (req, res) => {
+  const { email } = req.body;
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
@@ -26,6 +25,76 @@ const createUserUsingCredentials = errorHandler(async (req, res) => {
           "User with given email already exists. Kindly login using the email.",
       });
     }
+  }
+
+  const otp = otpGenerator.generate(4, {
+    upperCaseAlphabets: false,
+    lowerCaseAlphabets: false,
+    specialChars: false,
+  });
+
+  console.log("otp generated", otp);
+
+  let result = await OTP.findOne({ otp: otp });
+  while (result) {
+    otp = otpGenerator.generate(4, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
+    result = await OTP.findOne({ otp: otp });
+  }
+
+  const otpBody = await OTP.create({
+    email,
+    otp,
+  });
+  console.log(otpBody);
+  res.status(200).json({
+    message: "otp sent successfullt",
+    otp,
+  });
+});
+
+export const createUserUsingCredentials = errorHandler(async (req, res) => {
+  const { username, email, password, otp } = req.body;
+
+  if (!username || !email || !password) {
+    throw new Error("Please fill all the inputs.");
+  }
+
+  // const existingUser = await User.findOne({ email });
+
+  // if (existingUser) {
+  //   const loginMethod = existingUser.loginMethod;
+  //   if (loginMethod === "google") {
+  //     return res.status(400).json({
+  //       message: "Email is already in use.",
+  //     });
+  //   }
+
+  //   if (loginMethod === "credentials") {
+  //     return res.status(400).json({
+  //       message:
+  //         "User with given email already exists. Kindly login using the email.",
+  //     });
+  //   }
+  // }
+
+  const recentOtp = await OTP.findOne({ email })
+    .sort({ createdAt: -1 })
+    .limit(1);
+
+  if (!recentOtp) {
+    return res.status(400).json({
+      message: "otp expired",
+    });
+  }
+
+  if (otp !== recentOtp.otp) {
+    return res.status(400).json({
+      message: "otp not matching",
+    });
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -48,7 +117,75 @@ const createUserUsingCredentials = errorHandler(async (req, res) => {
   });
 });
 
-const googleCallback = errorHandler(async (req, res) => {
+export const forgotPassword = errorHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found." });
+  }
+
+  // there is no need to have change password in case of google login.
+  const loginMethod = user.loginMethod;
+  if (loginMethod === "google") {
+    return res.status(400).json({
+      message: "Use gmail login for this email address",
+    });
+  }
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  user.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+  await user.save();
+
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+  const message = `You requested a password reset. Please use the following link to reset your password:\n\n${resetUrl}\n\nThis link will expire in 10 minutes.`;
+
+  try {
+    await sendEmail(email, "Password Reset Request", message);
+    res.status(200).json({ message: "Password reset email sent" });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.status(500);
+    throw new Error("Email could not be sent");
+  }
+});
+
+export const resetPassword = errorHandler(async (req, res) => {
+  const { password } = req.body;
+  const { token } = req.params;
+
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+  const user = await User.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid or expired token");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  user.password = hashedPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful" });
+});
+
+export const googleCallback = errorHandler(async (req, res) => {
   const user = req.user;
   const token = createToken(res, user._id);
 
@@ -60,7 +197,7 @@ const googleCallback = errorHandler(async (req, res) => {
   res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${queryParams}`);
 });
 
-const credentialsLogin = errorHandler(async (req, res) => {
+export const credentialsLogin = errorHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const existingUser = await User.findOne({ email });
@@ -93,7 +230,7 @@ const credentialsLogin = errorHandler(async (req, res) => {
   res.status(401).json({ message: "Invalid password" });
 });
 
-const logoutCurrentUser = errorHandler(async (req, res) => {
+export const logoutCurrentUser = errorHandler(async (req, res) => {
   res.cookie("jwt", "", {
     httyOnly: true,
     expires: new Date(0),
@@ -102,12 +239,12 @@ const logoutCurrentUser = errorHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-const getAllUsers = errorHandler(async (req, res) => {
+export const getAllUsers = errorHandler(async (req, res) => {
   const users = await User.find({});
   res.json(users);
 });
 
-const getCurrentUserProfile = errorHandler(async (req, res) => {
+export const getCurrentUserProfile = errorHandler(async (req, res) => {
   console.log(req.user._id);
 
   const user = await User.findById(req.user._id);
@@ -124,7 +261,7 @@ const getCurrentUserProfile = errorHandler(async (req, res) => {
   }
 });
 
-const updateCurrentUserProfile = errorHandler(async (req, res) => {
+export const updateCurrentUserProfile = errorHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
@@ -151,7 +288,7 @@ const updateCurrentUserProfile = errorHandler(async (req, res) => {
   }
 });
 
-const deleteUserById = errorHandler(async (req, res) => {
+export const deleteUserById = errorHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
@@ -168,7 +305,7 @@ const deleteUserById = errorHandler(async (req, res) => {
   }
 });
 
-const getUserById = errorHandler(async (req, res) => {
+export const getUserById = errorHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
 
   if (user) {
@@ -179,7 +316,7 @@ const getUserById = errorHandler(async (req, res) => {
   }
 });
 
-const updateUserById = errorHandler(async (req, res) => {
+export const updateUserById = errorHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
@@ -200,16 +337,3 @@ const updateUserById = errorHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
-
-export {
-  createUserUsingCredentials,
-  credentialsLogin,
-  googleCallback,
-  logoutCurrentUser,
-  getAllUsers,
-  getCurrentUserProfile,
-  updateCurrentUserProfile,
-  deleteUserById,
-  getUserById,
-  updateUserById,
-};

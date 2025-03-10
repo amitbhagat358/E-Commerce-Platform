@@ -9,14 +9,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   ChevronUp,
   Heart,
@@ -26,17 +26,17 @@ import {
   ShoppingCart,
   User2,
   UserPlus,
-} from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLogoutMutation } from '@/Redux/api/usersApiSlice';
-import { logout } from '@/Redux/features/auth/authSlice';
+} from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLogoutMutation } from "@/Redux/api/usersApiSlice";
+import { logout } from "@/Redux/features/auth/authSlice";
 
 const navItems = [
-  { name: 'Home', url: '', icon: Home },
-  { name: 'Shop', url: 'shop', icon: ShoppingBag },
-  { name: 'Cart', url: 'cart', icon: ShoppingCart },
-  { name: 'Favourites', url: 'favourites', icon: Heart },
+  { name: "Home", url: "", icon: Home },
+  { name: "Shop", url: "shop", icon: ShoppingBag },
+  { name: "Cart", url: "cart", icon: ShoppingCart },
+  { name: "Favourites", url: "favourites", icon: Heart },
 ];
 
 export function AppSidebar() {
@@ -51,7 +51,7 @@ export function AppSidebar() {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
       console.error(error);
     }
@@ -72,8 +72,8 @@ export function AppSidebar() {
                     asChild
                     className={`font-semibold h-10 ${
                       location.pathname === `/${navItem.url}`
-                        ? 'bg-gray-100'
-                        : 'text-gray-700'
+                        ? "bg-gray-100"
+                        : "text-gray-700"
                     }`}
                   >
                     <Link to={`/${navItem.url}`}>
@@ -150,12 +150,12 @@ export function AppSidebar() {
               <>
                 <Link to="/register">
                   <SidebarMenuButton className="mb-5 font-semibold truncate overflow-hidden whitespace-nowrap">
-                    <UserPlus /> Sign Up
+                    <UserPlus /> Signup
                   </SidebarMenuButton>
                 </Link>
                 <Link to="/login">
                   <SidebarMenuButton className="mb-5 font-semibold truncate overflow-hidden whitespace-nowrap">
-                    <LogIn /> Sign In
+                    <LogIn /> Login
                   </SidebarMenuButton>
                 </Link>
               </>

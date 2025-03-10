@@ -27,6 +27,8 @@ import PlaceOrder from "./Pages/Orders/PlaceOrder.jsx";
 import Order from "./Pages/Orders/Order.jsx";
 import OrderList from "./Pages/Admin/OrderList.jsx";
 import GoogleAuth from "./Pages/Auth/GoogleAuth.jsx";
+import ForgotPassword from "./Pages/Auth/ForgotPassword.jsx";
+import ResetPassword from "./Pages/Auth/ResetPassword.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +36,8 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/auth/callback" element={<GoogleAuth />} />
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/product/:id" element={<ProductDetails />} />

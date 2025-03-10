@@ -10,17 +10,23 @@ import {
   deleteUserById,
   getUserById,
   updateUserById,
+  sendotp,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/userController.js";
 import passport from "passport";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
-import errorHandler from "../middlewares/errorHandler.js";
 import "../Utils/passport.js";
 
 const router = express.Router();
 
 router.post("/auth/login", credentialsLogin);
 router.post("/auth/signup", createUserUsingCredentials);
+router.post("/auth/sendOtp", sendotp);
+router.post("/auth/forgot-password", forgotPassword);
+router.post("/auth/reset-password/:token", resetPassword);
+
 router.post("/logout", logoutCurrentUser);
 
 router.get(
